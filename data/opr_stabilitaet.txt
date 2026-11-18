@@ -1,0 +1,4 @@
+n = 5, Stufe M, r = 2, 30 Instanzen, 2000 Szenarien je Satz; Instanzstrom = Basis des Instanz-Zufalls-Seeds
+Basis 7000: Δ -7.25 %, besser/gleich/schlechter 25/5/0, auf Satz B besser in 25, Lücke Streuung 0.02 %, SPT 8.37 %, Optimum auf B / auf A 0.996
+Basis 7100: Δ -6.36 %, besser/gleich/schlechter 24/6/0, auf Satz B besser in 24, Lücke Streuung 0.05 %, SPT 7.22 %, Optimum auf B / auf A 1.004
+Basis 7200: Δ -4.61 %, besser/gleich/schlechter 22/8/0, auf Satz B besser in 21, Lücke Streuung 0.03 %, SPT 5.14 %, Optimum auf B / auf A 0.997
