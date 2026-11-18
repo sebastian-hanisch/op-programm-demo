@@ -39,6 +39,10 @@ def test_claim_01_delta_zaehlung_und_beispiele():
         s = cell(n, "M", 2.0, True)
         assert s["delta"] * 100 == pytest.approx(delta, abs=0.6)
         assert s["delta_lo"] * 100 == pytest.approx(lo, abs=0.9) and s["delta_hi"] * 100 == pytest.approx(hi, abs=0.9)
+    for n in C.FROZEN_NS:                                           # Vorsprung (|Δ|) bei r = 8 in allen 12 Kombinationen aus n und Stufe am kleinsten
+        for lv in C.LEVELS:
+            by_r = {r: abs(cell(n, lv, r)["delta"]) for r in C.RS}
+            assert min(by_r, key=by_r.get) == 8.0, (n, lv)
 
 
 def test_claim_02_luecken_und_optimum_gleich_streuungsregel():
@@ -161,6 +165,11 @@ def test_claim_10_quantil():
         assert AN.tau_summary(2, r, cw)["nv"] == pytest.approx(cw / (cw + 1))
     med = [AN.tau_summary(n, r, 2.0)["rel_B_median"] for n in (3, 4, 6, 8) for r in (0.0, 1.0)]
     assert min(med) == pytest.approx(1.06, abs=0.02) and max(med) == pytest.approx(1.20, abs=0.02)
+    for r, lo, hi in ((0.0, 1.09, 1.20), (1.0, 1.06, 1.18)):    # die Spanne mischt beide Überziehpreise; einzeln gelesen
+        one = [AN.tau_summary(n, r, 2.0)["rel_B_median"] for n in (3, 4, 6, 8)]
+        assert min(one) == pytest.approx(lo, abs=0.02) and max(one) == pytest.approx(hi, abs=0.02), r
+    knapp = AN.tau_summary(2, 0.0, 0.5)                         # 1 : 2: bei n = 2 lohnt eine knappere Planung als der Mittelwert
+    assert knapp["tau"] == 0.35 and knapp["rel_B"] == pytest.approx(0.842, abs=0.012) and knapp["tau"] < FR.tau_phi(2)["mean"]
     assert AN.tau_summary(8, 1.0, 1.0)["rel_B"] == pytest.approx(0.937, abs=0.012)
     for r in (0.0, 1.0):
         assert all((AN.tau_summary(n, r, 0.5)["tau"] or 0) <= 0.60 for n in C.TAU_NS)

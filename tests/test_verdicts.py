@@ -21,6 +21,10 @@ def test_verdict_order_nennt_live_zahlen_zaehlung_und_luecken():
     assert "besser in 28, gleich in 2, schlechter in 0" in text and "mittlere Differenz -9,4 %" in text
     assert "besser in 27 von 30" in text and "n = 7, Stufe M, r = 2,0" in text and "in der Literatur bekannt" in text
     assert "Lücke zum Stichproben-Optimum: SPT 9,80 %, Streuungsregel 0,15 %" in text
+    assert "genau die Reihenfolge" not in text                                # ohne die Zählung der Zelle kein Satz dazu
+    text = ev.verdict_order(LIVE, dict(_cell(), opt_is_sd=17), INFO)[1]
+    assert "in 17 von 30 Instanzen genau die Reihenfolge des Stichproben-Optimums (nahe am Optimum heißt nicht: das Optimum)" in text
+    assert "Ergebnisses der besten lokalen Verbesserung" in ev.verdict_order(dict(LIVE, enum=False, n=12), dict(_cell(), opt_is_sd=3), dict(INFO, n_cell=12))[1]
 
 
 def test_verdict_order_schwelle_20_von_30_ist_inklusive():
@@ -68,6 +72,7 @@ def test_verdict_coupling_nennt_drei_kopplungen_und_kennzeichnet_die_deutung():
     assert "dieselbe Reihenfolge" in text and "in 30 von 30" in text
     assert "Zufall 28,8 % über SPT" in text and "Zufall 29,5 % über SPT" in text and "Zufall +4,9 % gegen SPT" in text
     assert "Deutung, nicht gemessen als Ursache" in text
+    assert "nur bei gleichem Variationskoeffizienten zusammen" in text and "nur im Mittel" in text
 
 
 def _lines(sd, spt, opt, same):
@@ -92,7 +97,8 @@ def test_verdict_tau_nennt_tau_stern_gewinn_und_median():
     summ = {"tau": 0.7, "rel_B": 0.883, "rel_B_median": 1.119, "nv": 0.5}
     kind, text = ev.verdict_tau(8, 0.0, "1 : 1", summ, {"mean": 0.568})
     assert kind == "info" and "bestes τ* = 0,70" in text and "0,883fache" in text and "1,119fache" in text and "Quantil 0,568" in text and "Zeitungsverkäufer-Verhältnis" in text
-    assert "Der Gewinn ist hier klein" not in text
+    assert "Der Gewinn ist hier klein" not in text and "knappere Planung" not in text and "ohne Überziehpreis" in text
+    assert "hier lohnt eine knappere Planung als der Mittelwert" in ev.verdict_tau(2, 0.0, "1 : 2", dict(summ, tau=0.35, rel_B=0.842), {"mean": 0.568})[1]
     assert "Der Gewinn ist hier klein" in ev.verdict_tau(3, 1.0, "1 : 1", dict(summ, rel_B=0.996), {"mean": 0.57})[1]
     assert "Hier bleibt der Mittelwert die beste geplante Dauer" in ev.verdict_tau(3, 1.0, "1 : 2", dict(summ, tau=None, rel_B=1.0), {"mean": 0.57})[1]
 

@@ -121,4 +121,7 @@ def test_sichtbar_anwendungsbeispiel_keine_beratung_und_expander_per_titel():
     at = _fresh_app()
     assert any("Anwendungsbeispiel, keine Beratung" in m.value for m in at.markdown)
     labels = {e.label for e in at.expander}
-    assert "🔧 Wie wir das erreichen – vollständiger Methodenvergleich" in labels and "📐 Mathematische Formulierung" in labels
+    assert {"💬 In einfachen Worten", "🔧 Wie wir das erreichen – vollständiger Methodenvergleich", "📐 Mathematische Formulierung"} <= labels
+    texts = " ".join(m.value for m in at.markdown)
+    assert "https://sebastianhanisch.net/op-programm-erklaert.html)" in texts and "op-programm-erklaert.html#fachleute" in texts
+    assert texts.count("Lesehilfe.") == 1 and "| Symbol | Bedeutung |" in texts and texts.count("| Symbol | Bedeutung |") == 1

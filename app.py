@@ -116,6 +116,19 @@ st.html(kopf_css(dunkles_design()))
 with st.container(key="kopf"):
     st.title("🧩 OP-Programm: Reihenfolge bei unsicheren Dauern")
 st.markdown(TX.DISCLAIMER)
+
+# erklaerseite:einfach:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/op-programm-erklaert.json, nicht von Hand ändern)
+with st.expander("💬 In einfachen Worten"):
+    st.markdown(
+        """
+Ein Operationssaal, ein Tag, mehrere Eingriffe mit erfundenen, schwankenden Dauern. Die Termine werden nach den Durchschnittsdauern vergeben, deshalb überträgt sich jede Verspätung auf die Folgenden. Gefragt ist nur die **Reihenfolge**: Ist „kleinste Streuung zuerst“ besser als „kürzeste Dauer zuerst“, und wie nah liegt sie am besten gefundenen Tagesprogramm?
+
+Die Antwort hängt daran, was gezählt wird (Wartezeit ab Termin oder ab Tagesbeginn), wie Streuung und Dauer zusammenhängen und wie teuer das Überziehen ist. Zwei weitere Ansichten zeigen die geplante Dauer und ein knappes Aufwachbett. Alle Zahlen sind erfunden: Die Demo ist ein Anwendungsbeispiel, keine Beratung.
+
+[Ausführlich und verständlich erklärt, mit Fachteil](https://sebastianhanisch.net/op-programm-erklaert.html)
+        """
+    )
+# erklaerseite:einfach:end
 st.markdown(TX.INTRO)
 st.caption("🔗 Die Adresszeile oben spiegelt Ihre aktuelle Konfiguration wider – einfach kopieren, um ein Szenario zu teilen.")
 
@@ -239,7 +252,7 @@ if view == "Reihenfolge":
     kind, text = ev.verdict_mass(lead_level, r, lead, mb, mass)
     getattr(st, kind)(text)
     st.caption("Das Wartezeit-Gewicht allein ist kein Maß-Regler: es kippt die Rangfolge nicht (Streuungsregel besser als SPT in 29 von 30 Instanzen für jedes Gewicht von 0,25 bis 8, Stufe M, n = 7; Nachrechnung mit dem heutigen Code, nicht eingefroren, die frühere Messreihe nannte 28); der Wegfall der Termine tut es.")
-    st.info("**Bekannt:** bei Maß B minimiert die kürzeste erwartete Dauer zuerst die erwartete Summe der Fertigstellungszeiten; die Streuung kommt nicht vor (Pinedo, Kap. 15, arXiv-Fassung im Wortlaut gelesen; das Springer-Lehrbuch nicht).")
+    st.info("**Bekannt:** bei Maß B minimiert die kürzeste erwartete Dauer zuerst die erwartete Summe der Fertigstellungszeiten; die Streuung kommt nicht vor (Lenstra/Shmoys, „Elements of Scheduling“, arXiv 2001.06005, im Wortlaut gelesen; ob die Aussage dort Pinedos Kap. 15 entspricht, ist nicht belegt; Pinedos Lehrbuch nicht gelesen).")
 
     # --- Experiment 3 -----------------------------------------------------------------------------------------------------------------------
     st.markdown("### 3 · Wer gewinnt gegen den Zufall, und warum?")
@@ -298,7 +311,7 @@ if view == "Reihenfolge":
 # =============================================================================================================================================
 elif view == "Geplante Dauer":
     st.markdown("## 🎯 Geplante Dauer: Mittelwert oder Quantil?")
-    st.markdown("Statt der Mittelwerte kann man jedem Eingriff ein **Quantil τ** seiner Dauer als geplante Dauer geben. Reihenfolge: kleinste Streuung zuerst, Stufe M. Für **einen** Übergang ist das beste Quantil cw/(cw + 1) (Zeitungsverkäufer); hier zeigt sich, was ein ganzer Tag daraus macht.")
+    st.markdown("Statt der Mittelwerte kann man jedem Eingriff ein **Quantil τ** seiner Dauer als geplante Dauer geben. Reihenfolge: kleinste Streuung zuerst, Stufe M. Für **einen** Übergang (zwei Eingriffe, ohne Überziehpreis) ist das beste Quantil cw/(cw + 1) (Zeitungsverkäufer); hier zeigt sich, was ein ganzer Tag daraus macht.")
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         n2 = int(_select("Eingriffe n", C.N2_CHOICES, "n2_select"))
@@ -380,6 +393,29 @@ with st.expander("🔧 Wie wir das erreichen – vollständiger Methodenvergleic
     st.markdown(TX.METHODS_MD)
 
 with st.expander("📐 Mathematische Formulierung"):
+    # erklaerseite:lesehilfe:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/op-programm-erklaert.json, nicht von Hand ändern)
+    st.markdown(
+        r"""
+**Lesehilfe.** Gegeben sind $n$ Eingriffe mit lognormal verteilter Dauer (Mittel $m_i$, Variationskoeffizient $c_i$) und Gewichte für Wartezeit, Leerlauf und Überziehen. Gesucht ist eine Reihenfolge $\pi$ mit kleinen erwarteten Kosten. Die Formeln unten sind das vollständige Modell dieser Demo.
+
+| Symbol | Bedeutung |
+|---|---|
+| $i, n$ | Eingriff, Zahl der Eingriffe |
+| $D_i, m_i, c_i$ | Dauer, Mittel und Variationskoeffizient des Eingriffs $i$ |
+| $\pi(k)$ | der Eingriff an Stelle $k$ der Reihenfolge |
+| $t_k$ | Termin (geplanter Start) an Stelle $k$ |
+| $x_k, f_k$ | tatsächlicher Start und Ende an Stelle $k$ |
+| $W_k, I_k$ | Wartezeit und Leerlauf vor Stelle $k$ |
+| $T$ | Tagesende |
+| $c_w, r$ | Gewicht der Wartezeit (Leerlauf hat Gewicht 1), Überziehpreis |
+| $e$ | Vorlauf: der Patient kommt $e$ Minuten vor seinem Termin |
+| $\tau$ | Quantil der geplanten Dauer |
+| $B, R_k, g_k$ | Zahl der Aufwachbetten, Aufwachdauer, Zeitpunkt, zu dem der Patient den Saal verlässt |
+
+[Schritt für Schritt erklärt, mit Herleitung und Literatur](https://sebastianhanisch.net/op-programm-erklaert.html#fachleute)
+        """
+    )
+    # erklaerseite:lesehilfe:end
     st.markdown(TX.MATH_MD_INTRO)
     for caption, eq in TX.MATH_EQUATIONS:
         st.markdown(caption)

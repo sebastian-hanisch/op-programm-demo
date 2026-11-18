@@ -204,6 +204,9 @@ def verdict_order(live: dict, cell: dict, info: dict):
                 f"Lücke {tag}: SPT {pct(cell['gap_spt'], 2)}, Streuungsregel {pct(cell['gap_sd'], 2)}")
     if "better_B" in cell:
         cell_txt += f"; auf einem zweiten Szenariensatz besser in {cell['better_B']} von 30"
+    if "opt_is_sd" in cell:
+        cell_txt += (f"; die Streuungsregel ist in {cell['opt_is_sd']} von 30 Instanzen genau die Reihenfolge des {'Stichproben-Optimums' if info['n_cell'] <= C.N_ENUM_MAX else 'Ergebnisses der besten lokalen Verbesserung'} "
+                     f"(nahe am Optimum heißt nicht: das Optimum)")
     cell_txt += ". Gilt für Maß A, Termine nach den Mittelwerten und diese erfundenen Dauern; die Faustregel selbst ist in der Literatur bekannt."
     kind = "success" if cell["better"] >= 20 else "info"
     return kind, live_txt + cell_txt
@@ -243,7 +246,7 @@ def verdict_coupling(n_cell: int, r: float, per: dict):
     """Experiment 3: per = {'K': summarize, 'M': ..., 'U': ...} (30 Instanzen je Zelle)."""
     K_, M_, U_ = per["K"], per["M"], per["U"]
     txt = (f"n = {n_cell}, r = {fmt(r, 1)}, 30 Instanzen je Kopplung (vorgerechnet). Konstanter Variationskoeffizient: Streuungsregel und SPT sind in {K_['equal']} von 30 Instanzen "
-           f"dieselbe Reihenfolge, Zufall {pct(K_['rel']['ZUFALL'] - 1)} über SPT. Stufe M: Zufall {pct(M_['rel']['ZUFALL'] - 1)} über SPT, Streuungsregel {pct(M_['delta'], 1, True)}. "
+           f"dieselbe Reihenfolge, Zufall {pct(K_['rel']['ZUFALL'] - 1)} über SPT; die beiden Regeln fallen nur bei gleichem Variationskoeffizienten zusammen. Stufe M (die absolute Streuung wächst mit dem Mittel nur im Mittel, die Regeln unterscheiden sich): Zufall {pct(M_['rel']['ZUFALL'] - 1)} über SPT, Streuungsregel {pct(M_['delta'], 1, True)}. "
            f"Streuung unabhängig vom Mittel: Zufall {pct(U_['rel']['ZUFALL'] - 1, 1, True)} gegen SPT, Streuungsregel {pct(U_['delta'], 1, True)} "
            f"(besser in {U_['better']} von 30); Lücke der Streuungsregel zur besten lokalen Verbesserung bzw. zum Stichproben-Optimum {pct(U_['gap_sd'], 1)}, in Stufe M {pct(M_['gap_sd'], 2)}. "
            f"Deutung, nicht gemessen als Ursache: SPT sieht nur dort gut aus, wo die Streuung mit dem Mittel wächst.")
@@ -270,11 +273,13 @@ def verdict_tau(n: int, r: float, ratio: str, summ: dict, mean_level: dict):
     """Reiter Geplante Dauer: bestes Quantil tau* auf Satz A, Gewinn auf Satz B. summ = tau_summary; mean_level = tau_phi(n)."""
     star = "Mittelwert" if summ["tau"] is None else f"{fmt(summ['tau'], 2)}"
     gain = summ["rel_B"]
-    txt = (f"Stufe M, n = {n}, Wartezeit : Leerlauf = {ratio}, r = {fmt(r, 0)} (vorgerechnet, 30 Instanzen): bestes τ* = {star} (Zeitungsverkäufer-Verhältnis für einen Übergang: "
+    txt = (f"Stufe M, n = {n}, Wartezeit : Leerlauf = {ratio}, r = {fmt(r, 0)} (vorgerechnet, 30 Instanzen): bestes τ* = {star} (Zeitungsverkäufer-Verhältnis für einen Übergang, ohne Überziehpreis: "
            f"{fmt(summ['nv'], 2)}; der Mittelwert der Lognormalverteilung liegt im Mittel beim Quantil {fmt(mean_level['mean'], 3)}). Auf dem unabhängigen Satz B kostet die Planung mit τ* das "
            f"{fmt(gain, 3)}fache der Mittelwert-Planung, die Planung mit dem Median (τ = 0,50) das {fmt(summ['rel_B_median'], 3)}fache. ")
     if summ["tau"] is None:
         txt += "Hier bleibt der Mittelwert die beste geplante Dauer. "
+    elif summ["tau"] < mean_level["mean"] - 0.01:
+        txt += "τ* liegt unter dem Quantil des Mittelwerts: hier lohnt eine knappere Planung als der Mittelwert. "
     elif gain > 0.99:
         txt += "Der Gewinn ist hier klein. "
     txt += "Das Verhältnis gilt für einen Übergang, nicht für einen Tag; die Abhängigkeit von n ist gemessen, die Ursache (Übertrag der Verspätung) eine Deutung."

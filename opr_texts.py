@@ -28,17 +28,17 @@ LIT_ORDER = (
     "**Bekannt aus der Literatur.** Die Faustregel „kleinste Streuung zuerst“ ist in der Literatur bekannt (nach Abstracts und Sekundärangaben: E. N. Weiss 1990, Denton u. a. 2007, "
     "Kong u. a. 2016; im Wortlaut gelesen: de Kemp u. a. 2021, Jafarnia-Jahromi/Jain 2020). Bekannt ist auch, dass sie nicht allgemein optimal ist; dass sie bei Terminen nach den "
     "Mittelwerten und wachsender Patientenzahl unter einer Momentbedingung gegen das Optimum geht, bei optimierten Terminen nicht; dass bei „Wartezeit ab Tagesbeginn“ die kürzeste erwartete "
-    "Dauer zuerst optimal ist (Pinedo, Kap. 15, arXiv-Fassung im Wortlaut gelesen, das Springer-Lehrbuch nicht); dass ein hoher Überziehpreis die Regel verwundbarer macht und dass das Zeitungsverkäufer-Verhältnis nur für zwei "
+    "Dauer zuerst optimal ist (Lenstra/Shmoys, „Elements of Scheduling“, arXiv 2001.06005, im Wortlaut gelesen; ob die Aussage dort Pinedos Kap. 15 entspricht, ist nicht belegt; Pinedos Lehrbuch nicht gelesen); dass ein hoher Überziehpreis die Regel verwundbarer macht und dass das Zeitungsverkäufer-Verhältnis nur für zwei "
     "Eingriffe gilt. **Nichts davon ist hier neu.** Diese Demo lässt es in einem erfundenen Modell ausprobieren: mit Zählung über Instanzen, mit einem stetigen Maß-Regler (Vorlauf) "
     "und mit einem Aufwachbett. Alle Zahlen sind eigene Messungen in diesem erfundenen Modell; die Schranken von de Kemp u. a. werden hier nicht angewendet (ob sie trotzdem gelten, ist nicht geprüft), weil sie eine "
     "Ordnungsannahme verlangen, die die Instanzen hier selten erfüllen (README, Tabelle „Befunde“, Zeile 11)."
 )
 
 LIT_TAU = (
-    "**Bekannt aus der Literatur.** Das Zeitungsverkäufer-Verhältnis cw/(cw + 1) gilt für einen einzelnen Übergang (zwei Eingriffe, Weiss nach Sekundärangabe); für Reihen braucht es eine "
+    "**Bekannt aus der Literatur.** Das Zeitungsverkäufer-Verhältnis cw/(cw + 1) gilt für einen einzelnen Übergang (zwei Eingriffe, ohne Überziehpreis, Weiss nach Sekundärangabe); für Reihen braucht es eine "
     "Heuristik oder Simulation (Jafarnia-Jahromi/Jain, Bemerkung 16; de Kemp u. a., Abschn. 5: nur eine untere Schranke). Mittelwert-Termine sind nach Jafarnia-Jahromi/Jain (Sekundärangabe "
     "aus Denton/Gupta 2003) nur nahe am Optimum, solange die Wartezeitkosten etwa 10 bis 50 % der Leerlaufkosten betragen. Unsere Messung passt zur Richtung (bei 1 : 2 liegt das beste τ* "
-    "bei höchstens 0,60 und wächst auch dort mit n; bei n = 8 und r = 1 ist der Mittelwert selbst das Beste), die Zahl „10 bis 50 %“ ist hier nicht gemessen. Eigene Messung: wie das beste τ* mit n wächst. Die Herleitung des Quantils steht in den Nachbar-Demos "
+    "für r = 0 und r = 1 bei höchstens 0,60 und wächst auch dort mit n; bei wenigen Eingriffen lohnt dort eine knappere Planung als der Mittelwert, bei n = 8 und r = 1 ist der Mittelwert selbst das Beste), die Zahl „10 bis 50 %“ ist hier nicht gemessen. Eigene Messung: wie das beste τ* mit n wächst. Die Herleitung des Quantils steht in den Nachbar-Demos "
     "[newsvendor-direkt-demo](https://github.com/sebastian-hanisch/newsvendor-direkt-demo) und [quantil-ueberdeckung-demo](https://github.com/sebastian-hanisch/quantil-ueberdeckung-demo)."
 )
 
@@ -84,23 +84,8 @@ mehr hilft): **kein Optimum**. „Nicht optimal“ wird nur aus der **exakten Re
 """
 
 MATH_MD_INTRO = """
-**Gegeben:** $n$ Eingriffe $i$ mit Dauer $D_i$ (lognormal, Mittel $m_i$, Variationskoeffizient $c_i$), Gewichte $c_w$ (Wartezeit), $1$ (Leerlauf), $r$ (Überziehen).
-**Gesucht:** eine Reihenfolge $\\pi$ (Permutation der Eingriffe) mit kleinen erwarteten Kosten.
-
-| Symbol | Bedeutung |
-|---|---|
-| $i, n$ | Eingriff, Zahl der Eingriffe (4 bis 12; Reiter Aufwachbett: 6) |
-| $D_i, m_i, c_i, s_i$ | Dauer, Mittel, Variationskoeffizient, absolute Streuung $s_i = m_i c_i$ |
-| $\\mu_i, \\sigma_i$ | Parameter der Lognormalverteilung, siehe unten |
-| $\\pi(k)$ | der Eingriff an Stelle $k$ der Reihenfolge |
-| $t_k$ | Termin (geplanter Start) an Stelle $k$ |
-| $x_k, f_k$ | tatsächlicher Start und Ende an Stelle $k$ ($f_0 = 0$) |
-| $W_k, I_k$ | Wartezeit und Leerlauf vor Stelle $k$ |
-| $T$ | Tagesende, $T = 1{,}10 \\sum_i m_i$ |
-| $c_w, r$ | Gewicht der Wartezeit (Leerlauf hat Gewicht 1), Überziehpreis |
-| $e$ | Vorlauf: der Patient kommt $e$ Minuten vor seinem Termin |
-| $\\tau$ | Quantil der geplanten Dauer |
-| $B, R_k, g_k$ | Zahl der Aufwachbetten, Aufwachdauer, Zeitpunkt, zu dem der Patient den Saal verlässt |
+Die Lesehilfe oben erklärt die Symbole. **Zusätzlich** gilt: $n$ ist 4 bis 12 (Reiter Aufwachbett: 6); $s_i = m_i c_i$ ist die absolute Streuung des Eingriffs $i$; $\\mu_i, \\sigma_i$ sind die Parameter der
+Lognormalverteilung (erste Gleichung); das Tagesende ist $T = 1{,}10 \\sum_i m_i$, $f_0 = 0$; das Gewicht der Wartezeit ist $c_w = 1$, nur im Reiter Geplante Dauer wählbar ($c_w$ = 0,5 / 1 / 2 / 4, also Wartezeit : Leerlauf = 1 : 2, 1 : 1, 2 : 1, 4 : 1).
 """
 
 MATH_EQUATIONS = [
@@ -110,7 +95,7 @@ MATH_EQUATIONS = [
     ("Erwartete Kosten einer Reihenfolge (Maß A):", r"C(\pi)=\mathbb E\Big[\sum_{k=2}^{n}\big(c_w W_k+I_k\big)+r\,(f_n-T)^+\Big]"),
     ("Vorlauf $e$ (Patient kommt $e$ Minuten vor dem Termin, frühestens zum Tagesbeginn); die Identität ist exakt:", r"C^{(e)}(\pi)=C(\pi)+c_w\sum_{k=1}^{n}\min(t_k,e)"),
     ("Maß B (alle Patienten von Tagesbeginn an da, keine Termine, kein Leerlauf, kein Überziehen):", r"C^{B}(\pi)=\sum_{k=1}^{n}\sum_{j<k} m_{\pi(j)}"),
-    ("Geplante Dauer als Quantil (Reiter Geplante Dauer; $\\tau$ ist für alle Eingriffe gleich):", r"q_i(\tau)=e^{\mu_i+\sigma_i\Phi^{-1}(\tau)},\qquad t_k=\sum_{j<k} q_{\pi(j)}(\tau),\qquad \tau^\star_{n=2}=\tfrac{c_w}{c_w+1}"),
+    ("Geplante Dauer als Quantil (Reiter Geplante Dauer; $\\tau$ ist für alle Eingriffe gleich; das letzte Verhältnis, das Zeitungsverkäufer-Verhältnis, gilt nur für zwei Eingriffe und ohne Überziehpreis, $r = 0$):", r"q_i(\tau)=e^{\mu_i+\sigma_i\Phi^{-1}(\tau)},\qquad t_k=\sum_{j<k} q_{\pi(j)}(\tau),\qquad \tau^\star_{n=2}=\tfrac{c_w}{c_w+1}"),
     ("Aufwachbett ($B$ Betten; der Saal ist bis zum Abgang des Patienten blockiert):", r"g_k=\max\big(f_k,\ \text{früheste Zeit, zu der ein Bett frei ist}\big),\qquad x_{k+1}=\max(t_{k+1},g_k),\qquad \text{Bett frei ab } g_k+R_k"),
     ("Stichproben-Optimum auf $S$ Szenarien:", r"\hat\pi=\arg\min_\pi\ \frac1S\sum_{s=1}^{S}C_s(\pi)"),
 ]
