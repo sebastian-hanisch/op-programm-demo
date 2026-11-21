@@ -1,4 +1,4 @@
-"""Orakel-Tests für Regeln, Aufzählung, lokale Verbesserung, Quantil und Zeitungsverkäufer-Index.
+"""Orakel-Tests für Regeln, Aufzählung, lokale Verbesserung, Quantil und Newsvendor-Index.
 
 Orakel: Schleife je Reihenfolge und Szenario (Aufzählung n = 5 mit 120 und n = 7 mit 5 040 Reihenfolgen, Stichprobe), `scipy.stats.lognorm` für das Quantil, `scipy.integrate.quad`
 für die mittlere absolute Abweichung vom Median, Simulation (4 Standardfehler) für die geschlossene Form der erwarteten Wartezeit und des Leerlaufs bei n = 2."""

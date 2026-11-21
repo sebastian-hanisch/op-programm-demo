@@ -96,7 +96,7 @@ def test_verdict_exact_zaehlung_nennt_die_voraussetzung_symmetrische_zweipunkt_v
 def test_verdict_tau_nennt_tau_stern_gewinn_und_median():
     summ = {"tau": 0.7, "rel_B": 0.883, "rel_B_median": 1.119, "nv": 0.5}
     kind, text = ev.verdict_tau(8, 0.0, "1 : 1", summ, {"mean": 0.568})
-    assert kind == "info" and "bestes τ* = 0,70" in text and "0,883fache" in text and "1,119fache" in text and "Quantil 0,568" in text and "Zeitungsverkäufer-Verhältnis" in text
+    assert kind == "info" and "bestes τ* = 0,70" in text and "0,883fache" in text and "1,119fache" in text and "Quantil 0,568" in text and "Newsvendor-Verhältnis" in text
     assert "Der Gewinn ist hier klein" not in text and "knappere Planung" not in text and "ohne Überziehpreis" in text
     assert "hier lohnt eine knappere Planung als der Mittelwert" in ev.verdict_tau(2, 0.0, "1 : 2", dict(summ, tau=0.35, rel_B=0.842), {"mean": 0.568})[1]
     assert "Der Gewinn ist hier klein" in ev.verdict_tau(3, 1.0, "1 : 1", dict(summ, rel_B=0.996), {"mean": 0.57})[1]

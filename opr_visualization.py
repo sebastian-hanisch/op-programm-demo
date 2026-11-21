@@ -80,7 +80,7 @@ def build_tau_curve(taus, curve_a, curve_b, nv, star, live=None, mark=None):
     if mark is not None:
         fig.add_vline(x=xs[mark], line_dash="dash", line_color="gray")
     fig.add_hline(y=1.0, line_dash="dash", line_color="gray")
-    fig.update_layout(title=f"Kosten relativ zu „Mittelwert geplant“ je geplantem Quantil (Zeitungsverkäufer-Verhältnis {nv:.2f}; τ* markiert)".replace(".", ","),
+    fig.update_layout(title=f"Kosten relativ zu „Mittelwert geplant“ je geplantem Quantil (Newsvendor-Verhältnis {nv:.2f}; τ* markiert)".replace(".", ","),
                       xaxis_title="geplante Dauer = Quantil τ der Dauerverteilung", yaxis_title="Kosten relativ zu Mittelwert-Planung")
     if star is not None:
         fig.add_vline(x=xs[star], line_dash="dot", line_color=C.COLOR_OVER)

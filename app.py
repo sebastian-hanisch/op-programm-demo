@@ -311,7 +311,7 @@ if view == "Reihenfolge":
 # =============================================================================================================================================
 elif view == "Geplante Dauer":
     st.markdown("## 🎯 Geplante Dauer: Mittelwert oder Quantil?")
-    st.markdown("Statt der Mittelwerte kann man jedem Eingriff ein **Quantil τ** seiner Dauer als geplante Dauer geben. Reihenfolge: kleinste Streuung zuerst, Stufe M. Für **einen** Übergang (zwei Eingriffe, ohne Überziehpreis) ist das beste Quantil cw/(cw + 1) (Zeitungsverkäufer); hier zeigt sich, was ein ganzer Tag daraus macht.")
+    st.markdown("Statt der Mittelwerte kann man jedem Eingriff ein **Quantil τ** seiner Dauer als geplante Dauer geben. Reihenfolge: kleinste Streuung zuerst, Stufe M. Für **einen** Übergang (zwei Eingriffe, ohne Überziehpreis) ist das beste Quantil cw/(cw + 1) (Newsvendor); hier zeigt sich, was ein ganzer Tag daraus macht.")
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         n2 = int(_select("Eingriffe n", C.N2_CHOICES, "n2_select"))
@@ -336,7 +336,7 @@ elif view == "Geplante Dauer":
     rows = []
     for nn in C.TAU_NS:
         s = AN.tau_summary(nn, r2, cw)
-        rows.append({"n": nn, "bestes τ*": "Mittelwert" if s["tau"] is None else ev.fmt(s["tau"], 2), "Zeitungsverkäufer-Verhältnis": ev.fmt(s["nv"], 2),
+        rows.append({"n": nn, "bestes τ*": "Mittelwert" if s["tau"] is None else ev.fmt(s["tau"], 2), "Newsvendor-Verhältnis": ev.fmt(s["nv"], 2),
                      "Kosten bei τ* (Satz B, relativ zum Mittelwert)": ev.fmt(s["rel_B"], 3), "Median τ = 0,5": ev.fmt(s["rel_B_median"], 3)})
     st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
     st.caption("Raster 0,05; ein gröberes Raster kann den Gewinn unterschätzen. τ* wird auf Satz A gewählt, der Gewinn auf dem unabhängigen Satz B gemessen.")

@@ -1,7 +1,7 @@
 """Regeln für die Reihenfolge, Aufzählung (Stichproben-Optimum) und beste lokale Verbesserung.
 
 Regeln: SPT (Mittel aufsteigend), LPT (Mittel absteigend), Streuung aufsteigend, Streuung absteigend, Variationskoeffizient aufsteigend,
-Zeitungsverkäufer-Index aufsteigend (siebte Regel), Zufall (Mittel über 20 Zufallsreihenfolgen), abwechselnd kurz-lang (eigene Regel, nur im Reiter Aufwachbett).
+Newsvendor-Index aufsteigend (siebte Regel), Zufall (Mittel über 20 Zufallsreihenfolgen), abwechselnd kurz-lang (eigene Regel, nur im Reiter Aufwachbett).
 Gleichstände werden nach dem Index des Eingriffs gebrochen. Das „Optimum“ ist das Stichproben-Optimum: die beste Reihenfolge auf den Szenarien,
 die zur Bewertung dienen (n bis 7 durch Aufzählung aller n! Reihenfolgen); für n ab 8 gibt es nur die beste lokale Verbesserung, kein Optimum."""
 
@@ -17,7 +17,7 @@ RULE_NAMES = {
     "SD_ab": "größte Streuung zuerst",
     "LPT": "längste Dauer zuerst (LPT)",
     "CV_auf": "kleinster Variationskoeffizient zuerst",
-    "NV": "Zeitungsverkäufer-Index aufsteigend",
+    "NV": "Newsvendor-Index aufsteigend",
     "ZUFALL": "Zufallsreihenfolge (Mittel von 20)",
     "ALT": "abwechselnd kurz und lang",
 }
@@ -25,7 +25,7 @@ RULES = ("SPT", "LPT", "SD_auf", "SD_ab", "CV_auf", "NV")
 
 
 def newsvendor_index(m, cv) -> np.ndarray:
-    """Zeitungsverkäufer-Index je Eingriff (Gewichte 1 : 1): minimale Kosten, wenn die Dauer als Zielzeit geplant wird, E|D - Median|, geschlossen für Lognormal."""
+    """Newsvendor-Index je Eingriff (Gewichte 1 : 1): minimale Kosten, wenn die Dauer als Zielzeit geplant wird, E|D - Median|, geschlossen für Lognormal."""
     q = K.quantile_plan(m, cv, 0.5)
     return K.lognormal_over(m, cv, q) + K.lognormal_under(m, cv, q)
 

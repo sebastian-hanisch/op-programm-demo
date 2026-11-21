@@ -162,7 +162,7 @@ def tau_curve(m, cv, DA, perm, r: float, cw: float, taus=C.TAUS):
 
 
 def newsvendor_ratio(cw: float) -> float:
-    """Zeitungsverkäufer-Verhältnis cw / (cw + 1): bester Quantilswert für einen einzelnen Übergang bei Leerlauf-Gewicht 1."""
+    """Newsvendor-Verhältnis cw / (cw + 1): bester Quantilswert für einen einzelnen Übergang bei Leerlauf-Gewicht 1."""
     return cw / (cw + 1.0)
 
 
@@ -273,7 +273,7 @@ def verdict_tau(n: int, r: float, ratio: str, summ: dict, mean_level: dict):
     """Reiter Geplante Dauer: bestes Quantil tau* auf Satz A, Gewinn auf Satz B. summ = tau_summary; mean_level = tau_phi(n)."""
     star = "Mittelwert" if summ["tau"] is None else f"{fmt(summ['tau'], 2)}"
     gain = summ["rel_B"]
-    txt = (f"Stufe M, n = {n}, Wartezeit : Leerlauf = {ratio}, r = {fmt(r, 0)} (vorgerechnet, 30 Instanzen): bestes τ* = {star} (Zeitungsverkäufer-Verhältnis für einen Übergang, ohne Überziehpreis: "
+    txt = (f"Stufe M, n = {n}, Wartezeit : Leerlauf = {ratio}, r = {fmt(r, 0)} (vorgerechnet, 30 Instanzen): bestes τ* = {star} (Newsvendor-Verhältnis für einen Übergang, ohne Überziehpreis: "
            f"{fmt(summ['nv'], 2)}; der Mittelwert der Lognormalverteilung liegt im Mittel beim Quantil {fmt(mean_level['mean'], 3)}). Auf dem unabhängigen Satz B kostet die Planung mit τ* das "
            f"{fmt(gain, 3)}fache der Mittelwert-Planung, die Planung mit dem Median (τ = 0,50) das {fmt(summ['rel_B_median'], 3)}fache. ")
     if summ["tau"] is None:
