@@ -58,7 +58,7 @@ Alles erfunden; Minuten sind erfundene Zeiteinheiten. Der 📐-Expander der App 
 
 Regeln: SPT, Streuung aufsteigend (Hauptregel), Streuung absteigend, LPT, Variationskoeffizient aufsteigend, Newsvendor-Index aufsteigend (siebte Regel, nur als Zeile der Tabelle),
 Zufall (Mittel über 20 Zufallsreihenfolgen), im Reiter Aufwachbett zusätzlich „abwechselnd kurz und lang“ (eigene Regel, nicht die von Marcon/Dexter). Alle Regeln sehen **dieselben Szenarien**
-(gepaarter Vergleich); ein unabhängiger zweiter Satz („Satz B“) bewertet nur. Zufall nur über den ganzzahligen Generator SplitMix64 (`opr_rng.py`, plattformfeste Normalzahlen). Der **Instanzstrom** ist die Basiszahl, aus der die Instanzen gezogen werden (7000; ein zweiter Strom 7100, ein dritter 7200); **Satz A** ist der Szenariensatz, auf dem Regeln bewertet und das Stichproben-Optimum gewählt wird, **Satz B** der unabhängige zweite Satz, der nur bewertet.
+(gepaarter Vergleich); ein unabhängiger zweiter Satz („Satz B“) bewertet nur. Zufall nur über den ganzzahligen Generator SplitMix64 (`opr_rng.py`, plattformfeste Normalzahlen). Der **Instanzstrom** ist der Zufalls-Seed, aus dem die Instanzen gezogen werden (7000; ein zweiter Strom 7100, ein dritter 7200); **Satz A** ist der Szenariensatz, auf dem Regeln bewertet und das Stichproben-Optimum gewählt wird, **Satz B** der unabhängige zweite Satz, der nur bewertet.
 Live rechnet die App mit 500 oder 1 000 Szenarien, die Tabellen „vorgerechnet“ stammen aus `tools/opr_make_*.py` mit 2 000 Szenarien je Satz (je mit `--check`, das einzelne Zellen neu rechnet und
 im Band vergleicht). Je Instanznummer teilen sich die fünf Streuungsstufen derselben Zelle dieselben Standardnormalzahlen (es sind verschiedene Instanzen), das spart Rechenzeit.
 
@@ -129,7 +129,7 @@ Die Aussagen **bestätigen** sich; die Zahlen weichen ab. Die „früheren“ We
 
 ## Bewusst nicht umgesetzt
 
-* Optimierte Termine als Entscheidung, Mehrstufen- und Zwei-Stufen-Modelle, Stichprobenmittelwert-Näherung (SAA) mit Konvergenzanalyse.
+* Optimierte Termine als Entscheidung, Mehrstufen- und Zwei-Stufen-Modelle, Sample Average Approximation (SAA) mit Konvergenzanalyse.
 * Abhängige Dauern, Notfälle, mehrere Säle, andere Dauerverteilungen (Gamma, Mischungen), n über 12.
 * Ein PDF-Export.
 * Nachbau der Quantil-Herleitung ([newsvendor-direkt-demo](https://github.com/sebastian-hanisch/newsvendor-direkt-demo), [quantil-ueberdeckung-demo](https://github.com/sebastian-hanisch/quantil-ueberdeckung-demo))
