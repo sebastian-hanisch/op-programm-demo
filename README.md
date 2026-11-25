@@ -1,7 +1,6 @@
 # OP-Programm: Reihenfolge bei unsicheren Dauern – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-op-programm-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-op-programm-demo.streamlit.app/)**
 
 Fall-Demo für die Website „Sebastian Hanisch – Operations Research und Machine Learning“ (`demos.html`). **Anwendungsbeispiel, keine Beratung:** ein erfundener Operationssaal an einem
 erfundenen Tag. Alle Dauern, Kosten, Aufwachzeiten und Bettenzahlen sind Annahmen, keine Daten und keine Aussage über ein Krankenhaus; nichts hier ist eine Empfehlung für die
